@@ -1,0 +1,58 @@
+import streamlit as st
+import pandas as pd
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+# Veri setini yükle
+veri_seti = pd.read_csv("honey_purity_dataset.csv")
+
+# Bağımsız değişkenler ve hedef değişken arasında bölme yapalım
+X = veri_seti[['CS', 'pH', 'EC', 'WC', 'Viscosity', 'Density', 'G', 'F']]
+y = veri_seti['Purity']
+
+# Eğitim ve test veri kümelerini oluşturalım
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Ridge Regresyon modelini eğitelim
+ridge_model = Ridge(alpha=1.0) # Alpha parametresi düzenleme parametresidir
+ridge_model.fit(X_train, y_train)
+
+y_pred=ridge_model.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+# Purity tahmini ile fiyatı hesaplayacak fonksiyonu tanımlayalım
+def calculate_price(cs, ph, ec, wc, viscosity, density, g, f, purity, price_multiplier):
+    predicted_purity = ridge_model.predict([[cs, ph, ec, wc, viscosity, density, g, f]])
+    price = predicted_purity * price_multiplier
+    return predicted_purity, price
+
+
+### arayüz 
+
+st.set_page_config(
+    page_title="HoneyMoney",
+    page_icon=""
+)
+# Streamlit arayüzünü oluşturma
+st.title("Honey Price Estimation")
+
+# Değerleri al
+cs = st.number_input("CS (Color Score)", value=5.5, step=0.1)
+ph = st.number_input("pH", value=4.0, step=0.1)
+ec = st.number_input("EC (Electrical Conductivity)", value=3.0, step=0.1)
+wc = st.number_input("WC (Water Content)", value=15.0, step=0.1)
+viscosity = st.number_input("Viscosity", value=5000, step=100)
+density = st.number_input("Density", value=1.3, step=0.01)
+g = st.number_input("G (Glucose Level)", value=30, step=1)
+f = st.number_input("F (Fructose Level)", value=25, step=1)
+purity = st.number_input("Purity", value=0.8, step=0.01)
+price_multiplier = st.number_input("Price Multiplier", value=10, step=1)
+
+# Butona basıldığında hesaplama yap ve sonucu göster
+if st.button("Calculate"):
+    
+    predicted_purity, estimated_price = calculate_price(cs, ph, ec, wc, viscosity, density, g, f, purity, price_multiplier)
+    st.write("Estimated Purity:", predicted_purity[0]) # predicted_purity bir numpy array olduğu için ilk elemanını alıyoruz
+    st.write("Estimated Price:", estimated_price[0]) # estimated_price bir numpy array olduğu için ilk elemanını alıyoruz
+    st.write("Mean squered error",mean_squared_error)
