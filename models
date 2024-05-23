@@ -1,0 +1,35 @@
+#pip install tensorflow
+#pip install keras
+#pip install joblib
+#pip install pytorch-tabnet
+
+import tensorflow as tf
+
+# RNN modelini yükle
+rnn_model = tf.keras.models.load_model('RNN.h5')
+
+# MultiLayerdNetwork modelini yükle
+multilayerd_network_model = tf.keras.models.load_model('MultiLayerdNetwork.h5')
+
+
+import joblib
+
+# OneLayerdNetwork modelini yükle
+one_layerd_network_model = joblib.load('OneLayerdNetwork.pkl')
+
+
+from pycaret.regression import load_model
+
+# AutoML modelini yükle
+auto_ml_model = load_model('AutoMLbest_model')
+
+
+from pytorch_tabnet.tab_model import TabNetRegressor
+import json
+
+# TabNet modelini yükle
+tabnet_model = TabNetRegressor()
+with open('model_param.json', 'r') as f:
+    saved_params = json.load(f)
+tabnet_model.load_model('network.pt')
+
