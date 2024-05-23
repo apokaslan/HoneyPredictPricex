@@ -19,3 +19,6 @@ for example:``` model= load_model('OneLayerdNetwork')```
 
 ### Open App
 To run local, go to the local host given to you in the terminal: __http://localhost:8501__
+
+### Training
+The models were trained with colab. Trained models were saved and streamlit apps were created with vscode
