@@ -8,4 +8,4 @@ pip install joblib.
 pip install pycaret[all].
 ```
 ## run
-and Go to the file path where the stream.py file is located with ‘cd’ and then type > streamlit run stream.py  in the terminal
+and Go to the file path where the stream.py file is located with ‘cd’ and then type __streamlit run stream.py__ in the terminal
