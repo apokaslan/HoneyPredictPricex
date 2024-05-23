@@ -1,4 +1,7 @@
-## make the necessary installations 
+# Proje Başlığı Honey Predict Price 
+
+## Necessary installations
+
 pip install streamlit
 pip install pandas
 pip install joblib
